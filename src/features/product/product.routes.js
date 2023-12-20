@@ -20,6 +20,7 @@ productRouter.post(
     upload.single('imageUrl'),
     productController.addProduct);
 
+productRouter.get('/filter', productController.filterProducts);
 productRouter.get('/:id', productController.getOneProduct);
 
 
