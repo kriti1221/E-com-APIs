@@ -10,6 +10,11 @@ export default class ProductModel {
         this.sizes = sizes;
     }
 
+    static get(id) {
+        const product = products.find((i) => i.id == id);
+        return product;
+    }
+
     static add(product) {
         console.log("added");
         product.id = products.length + 1;
