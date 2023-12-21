@@ -23,9 +23,13 @@ export default class UserModel {
         );
         return user;
     }
+
+    static getAll() {
+        return users;
+    }
 }
 
-var users = [
+let users = [
     {
         id: 1,
         name: "Seller",
