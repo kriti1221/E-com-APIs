@@ -1,4 +1,7 @@
 import UserModel from './user.modal.js';
+import jwt from 'jsonwebtoken';
+
+
 export default class UserController {
 
 
@@ -9,14 +12,18 @@ export default class UserController {
     }
 
     signIn(req, res) {
-
         const { email, password } = req.body;
         const result = UserModel.SignIn(email, password);
         if (!result) {
             return res.status(404).send('Incorrect Credentials');
         }
         else {
-            return res.send('Login Successful');
+            const token = jwt.sign({ userID: result.id, email: result.email }, 
+                'nZoxVFd0ZqiskGuRoAmgYTRQqhmrK1Aq',
+                {
+                    expiresIn: '1h',
+                });
+            return res.status(200).send(token);
         }
 
     }
