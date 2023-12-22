@@ -20,6 +20,10 @@ server.get('/', (req, res) => {
     res.send("Welcome to Ecommerce APIs");
 });
 
+server.use((req, res) => {
+    res.status(400).send("API not found");
+});
+
 // 4. Specify port.
 server.listen(3200, () => {
     console.log("Server is running at 3200");
