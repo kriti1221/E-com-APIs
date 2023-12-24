@@ -5,9 +5,9 @@ import jwt from 'jsonwebtoken';
 export default class UserController {
 
 
-    signUp(req, res) {
+    async signUp(req, res) {
         const { name, email, password, type } = req.body;
-        const user = UserModel.SignUp(name, email, password, type);
+        const user = await UserModel.SignUp(name, email, password, type);
         res.status(201).send(user);
     }
 
@@ -18,7 +18,7 @@ export default class UserController {
             return res.status(404).send('Incorrect Credentials');
         }
         else {
-            const token = jwt.sign({ userID: result.id, email: result.email }, 
+            const token = jwt.sign({ userID: result.id, email: result.email },
                 'nZoxVFd0ZqiskGuRoAmgYTRQqhmrK1Aq',
                 {
                     expiresIn: '1h',

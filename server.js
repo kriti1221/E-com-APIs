@@ -6,6 +6,7 @@ import UserRouter from './src/features/user/user.routes.js';
 import basicAuthorizer from './src/middlewares/basicAuth.middleware.js';
 import jwtAuth from './src/middlewares/jwt.middleware.js';
 import cors from 'cors';
+import { main } from './src/config/mongodb.js';
 
 const server = express();
 var corsOptions = {
@@ -41,5 +42,6 @@ server.use((req, res) => {
 // 4. Specify port.
 server.listen(3200, () => {
     console.log("Server is running at 3200");
+    main();
 });
 
