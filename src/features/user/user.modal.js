@@ -1,4 +1,5 @@
 import { getDb } from "../../config/mongodb.js";
+import bcrypt from 'bcrypt';
 export default class UserModel {
     constructor(name, email, password, type, id) {
         this.name = name;
@@ -12,8 +13,9 @@ export default class UserModel {
         try {
             const db = getDb();
             const collection = db.collection("users");
+            const hashedPassword = await bcrypt.hash(password, 12);
             const newUser = new UserModel(
-                name, email, password, type);
+                name, email, hashedPassword, type);
             const result = await collection.insertOne(newUser);
             console.log(`A document was inserted with the _id: ${result.insertedId}`);
             return newUser;
@@ -24,11 +26,16 @@ export default class UserModel {
     }
 
 
-    static SignIn(email, password) {
-        const user = users.find(
-            (u) => u.email == email && u.password == password
-        );
-        return user;
+    static async SignIn(email) {
+        try {
+            const db = getDb();
+            const collection = db.collection("users");
+            return await collection.findOne({ email });
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(403).send("Password Incorrect");
+        }
     }
 
     static getAll() {
