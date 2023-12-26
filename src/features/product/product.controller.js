@@ -2,34 +2,39 @@ import ProductModel from "./product.model.js";
 
 export default class ProductController {
 
-    getAllProducts(req, res) {
-        const products = ProductModel.GetAll();
+    async getAllProducts(req, res) {
+        const products = await ProductModel.GetAll();
         res.status(200).send(products);
     }
 
-    addProduct(req, res) {
-        console.log(req.file.filename);
+    async addProduct(req, res) {
         const { name, price, sizes } = req.body;
         const newProduct = {
             name,
             price: parseFloat(price),
             sizes: sizes.split(','),
-            imageUrl: req.file.filename,
+            imageUrl: null,
         };
-        const createdRecord = ProductModel.add(newProduct);
+        const createdRecord = await ProductModel.add(newProduct);
         res.status(201).send(createdRecord);
     }
 
     rateProduct(req, res) { }
 
-    getOneProduct(req, res) {
-        const id = req.params.id;
-        const product = ProductModel.get(id);
-        if (!product) {
-            res.status(404).send('Product not found');
+    async getOneProduct(req, res) {
+        try {
+            const id = req.params.id;
+            const product = await ProductModel.get(id);
+            if (!product) {
+                res.status(404).send('Product not found');
+            }
+            else {
+                return res.status(200).send(product);
+            }
         }
-        else {
-            return res.status(200).send(product);
+        catch (err) {
+            console.log(err);
+            res.status(500).send("Internal server error");
         }
     }
 

@@ -1,7 +1,8 @@
-
+import { getDb } from "../../config/mongodb.js";
+import { ObjectId } from "mongodb";
 export default class ProductModel {
     constructor(id, name, desc, price, imageUrl, category, sizes) {
-        this.id = id;
+        this._id = id;
         this.name = name;
         this.desc = desc;
         this.price = price;
@@ -20,20 +21,42 @@ export default class ProductModel {
         return result;
     }
 
-    static get(id) {
-        const product = products.find((i) => i.id == id);
-        return product;
+    static async get(id) {
+        try {
+            const db = getDb();
+            const collection = db.collection("products");
+            return await collection.findOne({ _id: new ObjectId(id) });
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(403).send("Password Incorrect");
+        }
     }
 
-    static add(product) {
-        console.log("added");
-        product.id = products.length + 1;
-        products.push(product);
-        return product;
+    static async add(product) {
+        try {
+            const db = getDb();
+            const collection = db.collection("products");
+            const result = await collection.insertOne(product);
+            return result;
+        }
+        catch (err) {
+            console.log("something went wrong", err);
+        }
     }
 
-    static GetAll() {
-        return products;
+    static async GetAll() {
+        try {
+            const db = getDb();
+            const collection = db.collection("products");
+            const products = await collection.find().toArray();
+            console.log(products);
+            return products;
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(403).send("Password Incorrect");
+        }
     }
 }
 
