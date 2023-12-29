@@ -5,10 +5,10 @@ import express from 'express';
 // import bodyParser from 'body-parser';
 import productRouter from './src/features/product/product.routes.js';
 import UserRouter from './src/features/user/user.routes.js';
-import basicAuthorizer from './src/middlewares/basicAuth.middleware.js';
 import jwtAuth from './src/middlewares/jwt.middleware.js';
 import cors from 'cors';
 import { main } from './src/config/mongodb.js';
+import connectUsingMongoose from './src/config/mongooseConfig.js';
 
 const server = express();
 
@@ -33,6 +33,7 @@ server.use((req, res) => {
 
 server.listen(3200, () => {
     console.log("Server is running at 3200");
-    main();
+    // main();
+    connectUsingMongoose();
 });
 
