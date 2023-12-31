@@ -33,7 +33,7 @@ server.use((req, res) => {
 
 server.listen(3200, () => {
     console.log("Server is running at 3200");
-    // main();
-    connectUsingMongoose();
+    main();
+    // connectUsingMongoose();
 });
 
